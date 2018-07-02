@@ -1,0 +1,5 @@
+suites:
+  apiproblem_suite:
+    namespace: Phpro\ApiProblemBundle
+    psr4_prefix: Phpro\ApiProblemBundle
+  formatter.name: pretty

@@ -11,8 +11,8 @@ will be closed (this is selected by default).
 
 ## Coverage
 
-- All classes that interact solely with the core logic should be covered by Specs
+- All classes that interact solely with the core logic should be covered by Tests
 
 ## Code style / Formatting
 
-- All code in the `src` and `spec` folder must follow the PSR-2 standard and should comply with the php-cs-fixer config.
+- All code in the `src` and `test` folder must follow the PSR-2 standard and should comply with the php-cs-fixer config.

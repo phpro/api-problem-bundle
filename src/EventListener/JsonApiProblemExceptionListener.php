@@ -28,7 +28,7 @@ class JsonApiProblemExceptionListener
     {
         $request = $event->getRequest();
         if (
-            'json' !== $request->getRequestFormat() &&
+            false === mb_strpos($request->getRequestFormat(), 'json') &&
             false === mb_strpos((string) $request->getContentType(), 'json')
         ) {
             return;

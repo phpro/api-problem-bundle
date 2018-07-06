@@ -25,11 +25,6 @@ return [
 ];
 ```
 
-## Configuration
-
-TODO
-
-
 ## Supported response formats
 
 - application/problem+json
@@ -68,7 +63,7 @@ Body:
     "status": 400,
     "type": "http:\/\/www.w3.org\/Protocols\/rfc2616\/rfc2616-sec10.html",
     "title": "Bad Request",
-    "detail": "It aint all bad ..."
+    "detail": "It ain't all bad ..."
 }
 ```
 

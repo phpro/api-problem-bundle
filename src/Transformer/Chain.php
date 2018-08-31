@@ -12,11 +12,13 @@ class Chain implements ExceptionTransformerInterface
     /**
      * @var ExceptionTransformerInterface[]
      */
-    private $transformers;
+    private $transformers = [];
 
-    public function __construct(ExceptionTransformerInterface ...$transformers)
+    public function __construct(iterable $transformers)
     {
-        $this->transformers = $transformers;
+        foreach ($transformers as $transformer) {
+            $this->addTransformer($transformer);
+        }
     }
 
     public function transform(\Throwable $exception): ApiProblemInterface
@@ -33,5 +35,10 @@ class Chain implements ExceptionTransformerInterface
     public function accepts(\Throwable $exception): bool
     {
         return true;
+    }
+
+    private function addTransformer(ExceptionTransformerInterface $transformer): void
+    {
+        $this->transformers[] = $transformer;
     }
 }

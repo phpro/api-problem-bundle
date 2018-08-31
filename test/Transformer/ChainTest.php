@@ -20,25 +20,25 @@ class ChainTest extends TestCase
     /** @test */
     public function it_is_an_exception_transformer(): void
     {
-        $transformer = new Chain();
+        $transformer = new Chain([]);
         $this->assertInstanceOf(ExceptionTransformerInterface::class, $transformer);
     }
 
     /** @test */
     public function it_accepts_any_exception(): void
     {
-        $transformer = new Chain();
+        $transformer = new Chain([]);
         $this->assertTrue($transformer->accepts(new \Exception()));
     }
 
     /** @test */
     public function it_transforms_with_first_acceptable_transformer(): void
     {
-        $transformer = new Chain(
+        $transformer = new Chain([
             $this->mockTransformer(false),
             $this->mockTransformer(true, $apiProblem1 = $this->prophesize(ApiProblemInterface::class)->reveal()),
-            $this->mockTransformer(true, $apiProblem2 = $this->prophesize(ApiProblemInterface::class)->reveal())
-        );
+            $this->mockTransformer(true, $apiProblem2 = $this->prophesize(ApiProblemInterface::class)->reveal()),
+        ]);
 
         $this->assertEquals($apiProblem1, $transformer->transform(new \Exception()));
     }
@@ -46,7 +46,7 @@ class ChainTest extends TestCase
     /** @test */
     public function it_transforms_to_basic_exception_problem_when_no_transformer_matches(): void
     {
-        $transformer = new Chain($this->mockTransformer(false));
+        $transformer = new Chain([$this->mockTransformer(false)]);
 
         $this->assertInstanceOf(ExceptionApiProblem::class, $transformer->transform(new \Exception()));
     }

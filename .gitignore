@@ -1,0 +1,7 @@
+/vendor/
+composer.lock
+.php_cs.cache
+.php_cs
+grumphp.yml
+phpunit.xml
+var

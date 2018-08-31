@@ -16,6 +16,8 @@ When an `ApiProblemException` is triggered, this bundle will return the correct 
 composer require phpro/api-problem-bundle
 ```
 
+If you are not using the contrib recipes of `symfony/flex`, you'll have to manually add the bundle to your bundles file:
+
 ```php
 // config/bundles.php
 

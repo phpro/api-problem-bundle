@@ -1,7 +1,7 @@
 {
     "name": "phpro/api-problem-bundle",
     "description": "RFC7807 Problem details integration for Symfony",
-    "type": "library",
+    "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
         {

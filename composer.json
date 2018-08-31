@@ -2,12 +2,6 @@
     "name": "phpro/api-problem-bundle",
     "description": "RFC7807 Problem details integration for Symfony",
     "type": "library",
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.12",
-        "matthiasnoback/symfony-dependency-injection-test": "^3.0",
-        "phpro/grumphp": "^0.14.1",
-        "phpunit/phpunit": "^7.2"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -17,10 +11,17 @@
     ],
     "require": {
         "php": "^7.2",
-        "phpro/api-problem": "dev-master@dev",
+        "phpro/api-problem": "^1.0",
         "symfony/dependency-injection": "^4.1",
         "symfony/event-dispatcher": "^4.1",
         "symfony/http-kernel": "^4.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.12",
+        "matthiasnoback/symfony-dependency-injection-test": "^3.0",
+        "phpro/grumphp": "^0.14.1",
+        "phpunit/phpunit": "^7.2",
+        "symfony/security": "^4.1"
     },
     "config": {
         "sort-packages": true
@@ -34,11 +35,5 @@
         "psr-4": {
             "PhproTest\\ApiProblemBundle\\": "test/"
         }
-    },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/phpro/api-problem.git"
-        }
-    ]
+    }
 }

@@ -67,6 +67,36 @@ Body:
 }
 ```
 
+## Adding custom exception transformations
+
+Currently, we automatically transform exceptions from following packages to an ApiProblem instance:
+
+- phpro/api-problem
+- symfony/http-kernel
+- symfony/security
+
+Besides that, all other errors are transformed to a basic `ExceptionApiProblem` instance.
+
+If you want to add custom transformations, you can implement the `ExceptionTransformerInterface`
+ and register it in the symfony container with the `phpro.api_problem.exception_transformer` tag.
+ 
+```php
+use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
+
+class MyTransformer implements ExceptionTransformerInterface
+{
+    public function transform(\Throwable $exception): ApiProblemInterface
+    {
+        return new MyApiProblem($exception);
+    }
+
+    public function accepts(\Throwable $exception): bool
+    {
+        return $exception instanceof MyException;
+    }
+}
+```
+
 ## About
 
 ### Submitting bugs and feature requests

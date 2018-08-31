@@ -6,8 +6,8 @@ namespace Phpro\ApiProblemBundle\EventListener;
 
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\DebuggableApiProblemInterface;
-use Phpro\ApiProblem\Exception\ApiProblemException;
 use Phpro\ApiProblem\Http\ExceptionApiProblem;
+use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -15,12 +15,18 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 class JsonApiProblemExceptionListener
 {
     /**
+     * @var ExceptionTransformerInterface
+     */
+    private $exceptionTransformer;
+
+    /**
      * @var bool
      */
     private $debug;
 
-    public function __construct(bool $debug)
+    public function __construct(ExceptionTransformerInterface $exceptionTransformer, bool $debug)
     {
+        $this->exceptionTransformer = $exceptionTransformer;
         $this->debug = $debug;
     }
 
@@ -40,11 +46,11 @@ class JsonApiProblemExceptionListener
 
     private function convertExceptionToProblem(\Throwable $exception): ApiProblemInterface
     {
-        if ($exception instanceof ApiProblemException) {
-            return $exception->getApiProblem();
+        if (!$this->exceptionTransformer->accepts($exception)) {
+            return new ExceptionApiProblem($exception);
         }
 
-        return new ExceptionApiProblem($exception);
+        return $this->exceptionTransformer->transform($exception);
     }
 
     private function generateResponse(ApiProblemInterface $apiProblem): JsonResponse

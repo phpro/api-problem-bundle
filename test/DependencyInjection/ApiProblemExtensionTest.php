@@ -47,6 +47,7 @@ class ApiProblemExtensionTest extends AbstractExtensionTestCase
             [
                 'event' => 'kernel.exception',
                 'method' => 'onKernelException',
+                'priority' => '-5',
             ]
         );
     }

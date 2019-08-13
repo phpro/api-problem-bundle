@@ -9,7 +9,7 @@
         >
             <argument key="$exceptionTransformer" type="service" id="Phpro\ApiProblemBundle\Transformer\Chain" />
             <argument key="$debug" >%kernel.debug%</argument>
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="-5" />
         </service>
         <service id="Phpro\ApiProblemBundle\Transformer\Chain" class="Phpro\ApiProblemBundle\Transformer\Chain">
             <argument type="tagged" tag="phpro.api_problem.exception_transformer" />

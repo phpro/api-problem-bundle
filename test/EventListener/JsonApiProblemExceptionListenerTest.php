@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhproTest\ApiProblemBundle\EventListener;
 
+use DG\BypassFinals;
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\DebuggableApiProblemInterface;
 use Phpro\ApiProblem\Http\HttpApiProblem;
@@ -15,7 +16,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /** @covers \Phpro\ApiProblemBundle\EventListener\JsonApiProblemExceptionListener */
 class JsonApiProblemExceptionListenerTest extends TestCase
@@ -26,7 +27,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
     private $request;
 
     /**
-     * @var GetResponseForExceptionEvent|ObjectProphecy
+     * @var ExceptionEvent|ObjectProphecy
      */
     private $event;
 
@@ -37,10 +38,11 @@ class JsonApiProblemExceptionListenerTest extends TestCase
 
     protected function setUp(): void
     {
+        BypassFinals::enable();
         $this->request = $this->prophesize(Request::class);
-        $this->event = $this->prophesize(GetResponseForExceptionEvent::class);
+        $this->event = $this->prophesize(ExceptionEvent::class);
         $this->event->getRequest()->willReturn($this->request);
-        $this->event->getException()->willReturn(new \Exception('error'));
+        $this->event->getThrowable()->willReturn(new \Exception('error'));
         $this->exceptionTransformer = $this->prophesize(ExceptionTransformerInterface::class);
         $this->exceptionTransformer->accepts(Argument::any())->willReturn(false);
     }
@@ -135,7 +137,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $apiProblem->toArray()->willReturn($data);
         $exception = new \RuntimeException();
 
-        $this->event->getException()->willReturn($exception);
+        $this->event->getThrowable()->willReturn($exception);
         $this->exceptionTransformer->accepts($exception)->willReturn(true);
         $this->exceptionTransformer->transform($exception)->willReturn($apiProblem->reveal());
 

@@ -10,7 +10,7 @@ use Phpro\ApiProblem\Http\ExceptionApiProblem;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class JsonApiProblemExceptionListener
 {
@@ -30,7 +30,7 @@ class JsonApiProblemExceptionListener
         $this->debug = $debug;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event): void
+    public function onKernelException(ExceptionEvent $event): void
     {
         $request = $event->getRequest();
         if (
@@ -40,7 +40,7 @@ class JsonApiProblemExceptionListener
             return;
         }
 
-        $apiProblem = $this->convertExceptionToProblem($event->getException());
+        $apiProblem = $this->convertExceptionToProblem($event->getThrowable());
         $event->setResponse($this->generateResponse($apiProblem));
     }
 

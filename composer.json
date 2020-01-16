@@ -11,18 +11,18 @@
     ],
     "require": {
         "php": "^7.2",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.1",
         "phpro/api-problem": "^1.0",
-        "phpro/grumphp": "^0.17.2",
-        "phpunit/phpunit": "^8.5",
         "symfony/dependency-injection": "^5.0",
         "symfony/event-dispatcher": "^5.0",
-        "symfony/http-kernel": "^5.0",
-        "symfony/security-bundle": "^5.0"
+        "symfony/http-kernel": "^5.0"
     },
     "require-dev": {
         "dg/bypass-finals": "^1.1",
-        "friendsofphp/php-cs-fixer": "^2.12"
+        "friendsofphp/php-cs-fixer": "^2.12",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.1",
+        "phpro/grumphp": "^0.17.2",
+        "phpunit/phpunit": "^8.5",
+        "symfony/security-bundle": "^5.0"
     },
     "config": {
         "sort-packages": true

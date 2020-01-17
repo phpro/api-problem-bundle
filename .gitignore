@@ -5,3 +5,4 @@ composer.lock
 grumphp.yml
 phpunit.xml
 var
+.phpunit.result.cache

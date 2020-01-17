@@ -14,7 +14,6 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -66,6 +65,12 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $listener->onKernelException($this->event);
 
         $this->assertNotNull($this->event->getResponse());
+        $this->assertEquals([
+            'status' => 500,
+            'type' => 'http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html',
+            'title' => 'Internal Server Error',
+            'detail' => 'error',
+        ], json_decode($this->event->getResponse()->getContent(), true));
     }
 
     /** @test */
@@ -75,8 +80,13 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->request->getRequestFormat()->willReturn('html');
         $this->request->getContentType()->willReturn('application/json');
         $listener->onKernelException($this->event);
-
         $this->assertNotNull($this->event->getResponse());
+        $this->assertEquals([
+            'status' => 500,
+            'type' => 'http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html',
+            'title' => 'Internal Server Error',
+            'detail' => 'error',
+        ], json_decode($this->event->getResponse()->getContent(), true));
     }
 
     /** @test */
@@ -85,13 +95,6 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
         $this->request->getRequestFormat()->willReturn('json');
         $this->request->getContentType()->willReturn('application/json');
-
-        $this->event->setResponse(new JsonResponse([
-            'status' => 500,
-            'type' => HttpApiProblem::TYPE_HTTP_RFC,
-            'title' => HttpApiProblem::getTitleForStatusCode(500),
-            'detail' => 'error',
-        ]));
 
         $listener->onKernelException($this->event);
         $this->assertJsonStringEqualsJsonString(
@@ -117,7 +120,6 @@ class JsonApiProblemExceptionListenerTest extends TestCase
 
         $this->exceptionTransformer->accepts(Argument::type(\Exception::class))->willReturn(true);
         $this->exceptionTransformer->transform(Argument::type(\Exception::class))->willReturn($apiProblem->reveal());
-        $this->event->setResponse(new Response(json_encode([]), Response::HTTP_BAD_REQUEST, ['Content-Type' => 'application/problem+json']));
 
         $listener->onKernelException($this->event);
         $this->assertInstanceOf(JsonResponse::class, $this->event->getResponse());

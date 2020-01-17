@@ -26,9 +26,14 @@ class JsonApiProblemExceptionListenerTest extends TestCase
     private $request;
 
     /**
-     * @var GetResponseForExceptionEvent|ObjectProphecy
+     * @var ExceptionEvent
      */
     private $event;
+
+    /**
+     * @var \Throwable
+     */
+    private $exception;
 
     /**
      * @var ExceptionTransformerInterface|ObjectProphecy
@@ -39,8 +44,13 @@ class JsonApiProblemExceptionListenerTest extends TestCase
     {
         $this->request = $this->prophesize(Request::class);
         $httpKernel = $this->prophesize(HttpKernelInterface::class);
-        $exception = new \Exception('error');
-        $this->event = new ExceptionEvent($httpKernel->reveal(), $this->request->reveal(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $this->exception = new \Exception('error');
+        $this->event = new ExceptionEvent(
+            $httpKernel->reveal(),
+            $this->request->reveal(),
+            HttpKernelInterface::MASTER_REQUEST,
+            $this->exception
+        );
         $this->exceptionTransformer = $this->prophesize(ExceptionTransformerInterface::class);
         $this->exceptionTransformer->accepts(Argument::any())->willReturn(false);
     }
@@ -64,13 +74,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->request->getContentType()->willReturn(null);
         $listener->onKernelException($this->event);
 
-        $this->assertNotNull($this->event->getResponse());
-        $this->assertEquals([
-            'status' => 500,
-            'type' => 'http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html',
-            'title' => 'Internal Server Error',
-            'detail' => 'error',
-        ], json_decode($this->event->getResponse()->getContent(), true));
+        $this->assertApiProblemWithResponseBody(500, $this->parseDataForException());
     }
 
     /** @test */
@@ -79,14 +83,9 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
         $this->request->getRequestFormat()->willReturn('html');
         $this->request->getContentType()->willReturn('application/json');
+
         $listener->onKernelException($this->event);
-        $this->assertNotNull($this->event->getResponse());
-        $this->assertEquals([
-            'status' => 500,
-            'type' => 'http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html',
-            'title' => 'Internal Server Error',
-            'detail' => 'error',
-        ], json_decode($this->event->getResponse()->getContent(), true));
+        $this->assertApiProblemWithResponseBody(500, $this->parseDataForException());
     }
 
     /** @test */
@@ -97,15 +96,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->request->getContentType()->willReturn('application/json');
 
         $listener->onKernelException($this->event);
-        $this->assertJsonStringEqualsJsonString(
-            json_encode([
-                'status' => 500,
-                'type' => HttpApiProblem::TYPE_HTTP_RFC,
-                'title' => HttpApiProblem::getTitleForStatusCode(500),
-                'detail' => 'error',
-            ]),
-            $this->event->getResponse()->getContent()
-        );
+        $this->assertApiProblemWithResponseBody(500, $this->parseDataForException());
     }
 
     /** @test */
@@ -122,7 +113,24 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->exceptionTransformer->transform(Argument::type(\Exception::class))->willReturn($apiProblem->reveal());
 
         $listener->onKernelException($this->event);
-        $this->assertInstanceOf(JsonResponse::class, $this->event->getResponse());
+        $this->assertApiProblemWithResponseBody(400, []);
+    }
+
+    /** @test */
+    public function it_returns_the_status_code_from_the_api_problem(): void
+    {
+        $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
+        $this->request->getRequestFormat()->willReturn('json');
+        $this->request->getContentType()->willReturn('application/json');
+
+        $apiProblem = $this->prophesize(ApiProblemInterface::class);
+        $apiProblem->toArray()->willReturn(['status' => 123]);
+
+        $this->exceptionTransformer->accepts(Argument::type(\Exception::class))->willReturn(true);
+        $this->exceptionTransformer->transform(Argument::type(\Exception::class))->willReturn($apiProblem->reveal());
+
+        $listener->onKernelException($this->event);
+        $this->assertApiProblemWithResponseBody(123, ['status' => 123]);
     }
 
     /** @test */
@@ -134,17 +142,36 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $data = ['status' => 500, 'detail' => 'detail', 'debug' => true];
         $apiProblem->toDebuggableArray()->willReturn($data);
         $apiProblem->toArray()->willReturn($data);
-        $exception = new \RuntimeException();
 
-        $this->exceptionTransformer->accepts($exception)->willReturn(true);
-        $this->exceptionTransformer->transform($exception)->willReturn($apiProblem->reveal());
+        $this->exceptionTransformer->accepts($this->exception)->willReturn(true);
+        $this->exceptionTransformer->transform($this->exception)->willReturn($apiProblem->reveal());
 
         $this->request->getRequestFormat()->willReturn('json');
         $this->request->getContentType()->willReturn('application/json');
 
-        $this->event->setResponse(new JsonResponse($data, 500, ['Content-Type' => 'application/problem+json']));
-
         $listener->onKernelException($this->event);
-        $this->assertStringContainsString('JsonApiProblemExceptionListenerTest', $this->event->getResponse()->getContent());
+        $this->assertApiProblemWithResponseBody(500, $data);
+    }
+
+    private function assertApiProblemWithResponseBody(int $expectedResponseCode, array $expectedData): void
+    {
+        $response = $this->event->getResponse();
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertSame($expectedResponseCode, $response->getStatusCode());
+        $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertJsonStringEqualsJsonString(
+            \json_encode($expectedData),
+            $this->event->getResponse()->getContent()
+        );
+    }
+
+    private function parseDataForException(): array
+    {
+        return [
+            'status' => 500,
+            'type' => HttpApiProblem::TYPE_HTTP_RFC,
+            'title' => HttpApiProblem::getTitleForStatusCode(500),
+            'detail' => $this->exception->getMessage(),
+        ];
     }
 }

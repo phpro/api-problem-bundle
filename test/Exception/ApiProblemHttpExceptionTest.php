@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PhproTest\ApiProblemBundle\Exception;
 
-use Phpro\ApiProblem\Exception\ApiProblemException;
 use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblemBundle\Exception\ApiProblemHttpException;
+use Phpro\ApiProblemBundle\Transformer\ApiProblemExceptionTransformer;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ApiProblemHttpExceptionTest extends TestCase
 {
@@ -25,11 +25,11 @@ class ApiProblemHttpExceptionTest extends TestCase
     }
 
     /** @test */
-    public function it_is_an_instance_of_ApiProblemException(): void
+    public function it_is_accepted_by_the_ApiProblemExceptionTransformer(): void
     {
-        $exception = new ApiProblemHttpException($this->apiProblem->reveal());
+        $transformer = new ApiProblemExceptionTransformer();
 
-        $this->assertInstanceOf(ApiProblemException::class, $exception);
+        $this->assertTrue($transformer->accepts(new ApiProblemHttpException($this->apiProblem->reveal())));
     }
 
     /** @test */
@@ -37,7 +37,16 @@ class ApiProblemHttpExceptionTest extends TestCase
     {
         $exception = new ApiProblemHttpException($this->apiProblem->reveal());
 
-        $this->assertInstanceOf(HttpExceptionInterface::class, $exception);
+        $this->assertInstanceOf(HttpException::class, $exception);
+    }
+
+    /** @test */
+    public function it_contains_an_api_problem(): void
+    {
+        $apiProblem = $this->apiProblem->reveal();
+
+        $exception = new ApiProblemHttpException($apiProblem);
+        $this->assertEquals($apiProblem, $exception->getApiProblem());
     }
 
     /** @test */

@@ -6,11 +6,12 @@ namespace Phpro\ApiProblemBundle\Transformer;
 
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\Exception\ApiProblemException;
+use Phpro\ApiProblemBundle\Exception\ApiProblemHttpException;
 
 class ApiProblemExceptionTransformer implements ExceptionTransformerInterface
 {
     /**
-     * @param ApiProblemException $exception
+     * @param ApiProblemException|ApiProblemHttpException $exception
      */
     public function transform(\Throwable $exception): ApiProblemInterface
     {
@@ -19,6 +20,6 @@ class ApiProblemExceptionTransformer implements ExceptionTransformerInterface
 
     public function accepts(\Throwable $exception): bool
     {
-        return $exception instanceof ApiProblemException;
+        return $exception instanceof ApiProblemException || $exception instanceof ApiProblemHttpException;
     }
 }

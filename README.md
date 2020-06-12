@@ -6,7 +6,7 @@
 # Api Problem Bundle
 
 This package provides a [RFC7807](https://tools.ietf.org/html/rfc7807) Problem details exception listener for Symfony.
-Internal, this package uses the models provided by `phpro/api-problem`](https://www.github.com/phpro/api-problem).
+Internal, this package uses the models provided by [`phpro/api-problem`](https://www.github.com/phpro/api-problem).
 When an `ApiProblemException` is triggered, this bundle will return the correct response.
 
 
@@ -68,6 +68,9 @@ Body:
     "detail": "It ain't all bad ..."
 }
 ```
+
+As an alternative, use ```ApiProblemHttpException``` instead of ```ApiProblemException```, to make it possible to
+[exclude the specific status code from the log](https://symfony.com/doc/current/logging/monolog_exclude_http_codes.html)
 
 ## Adding custom exception transformations
 

@@ -51,7 +51,7 @@ SomeController {
 }
 ```
 
-When the controller is marked as a "json" format or the request `Content-Type` is `*/json`, this bundle kicks in.
+When the controller is marked as a "json" format, the request `Content-Type` is `*/json` or the request `Accept` header first value contains json (i.e. `application/json, text/html`), this bundle kicks in.
 It will transform the exception to following response:
 
 Headers:

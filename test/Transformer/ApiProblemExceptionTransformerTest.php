@@ -9,6 +9,7 @@ use Phpro\ApiProblem\Exception\ApiProblemException;
 use Phpro\ApiProblemBundle\Transformer\ApiProblemExceptionTransformer;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -16,6 +17,8 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 class ApiProblemExceptionTransformerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ApiProblemInterface|ObjectProphecy
      */

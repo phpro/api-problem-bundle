@@ -10,17 +10,18 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3 || ^8.0",
         "phpro/api-problem": "^1.0",
         "symfony/dependency-injection": "^4.4|^5.0",
         "symfony/event-dispatcher": "^4.4|^5.0",
         "symfony/http-kernel": "^4.4|^5.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.12",
-        "matthiasnoback/symfony-dependency-injection-test": "^3.0|^4.0",
-        "phpro/grumphp": "^0.17.2",
-        "phpunit/phpunit": "^8.5",
+        "friendsofphp/php-cs-fixer": "^2.16.7",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.2",
+        "phpro/grumphp-shim": "^1.2.0",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpunit/phpunit": "^9.4",
         "symfony/security-core": "^4.4|^5.0"
     },
     "config": {

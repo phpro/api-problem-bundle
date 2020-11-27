@@ -8,11 +8,14 @@ use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblemBundle\Exception\ApiProblemHttpException;
 use Phpro\ApiProblemBundle\Transformer\ApiProblemExceptionTransformer;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ApiProblemHttpExceptionTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var HttpApiProblem|ObjectProphecy
      */

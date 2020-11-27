@@ -11,6 +11,7 @@ use Phpro\ApiProblemBundle\EventListener\JsonApiProblemExceptionListener;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 /** @covers \Phpro\ApiProblemBundle\EventListener\JsonApiProblemExceptionListener */
 class JsonApiProblemExceptionListenerTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ObjectProphecy|Request
      */

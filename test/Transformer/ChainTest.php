@@ -10,6 +10,7 @@ use Phpro\ApiProblemBundle\Transformer\Chain;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -17,6 +18,8 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 class ChainTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @test */
     public function it_is_an_exception_transformer(): void
     {

@@ -6,6 +6,7 @@ namespace Phpro\ApiProblemBundle\Transformer;
 
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\Http\ExceptionApiProblem;
+use Throwable;
 
 class Chain implements ExceptionTransformerInterface
 {
@@ -21,7 +22,7 @@ class Chain implements ExceptionTransformerInterface
         }
     }
 
-    public function transform(\Throwable $exception): ApiProblemInterface
+    public function transform(Throwable $exception): ApiProblemInterface
     {
         foreach ($this->transformers as $transformer) {
             if ($transformer->accepts($exception)) {
@@ -32,7 +33,7 @@ class Chain implements ExceptionTransformerInterface
         return new ExceptionApiProblem($exception);
     }
 
-    public function accepts(\Throwable $exception): bool
+    public function accepts(Throwable $exception): bool
     {
         return true;
     }

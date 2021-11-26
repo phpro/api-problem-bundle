@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhproTest\ApiProblemBundle\Transformer;
 
+use Exception;
 use Phpro\ApiProblem\Http\ExceptionApiProblem;
 use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
@@ -29,7 +30,7 @@ class HttpExceptionTransformerTest extends TestCase
         $transformer = new HttpExceptionTransformer();
 
         $this->assertTrue($transformer->accepts(new HttpException(400, 'Bad Request')));
-        $this->assertFalse($transformer->accepts(new \Exception()));
+        $this->assertFalse($transformer->accepts(new Exception()));
     }
 
     /** @test */

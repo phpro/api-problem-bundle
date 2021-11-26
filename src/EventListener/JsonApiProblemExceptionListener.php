@@ -11,6 +11,7 @@ use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Throwable;
 
 class JsonApiProblemExceptionListener
 {
@@ -45,7 +46,7 @@ class JsonApiProblemExceptionListener
         $event->setResponse($this->generateResponse($apiProblem));
     }
 
-    private function convertExceptionToProblem(\Throwable $exception): ApiProblemInterface
+    private function convertExceptionToProblem(Throwable $exception): ApiProblemInterface
     {
         if (!$this->exceptionTransformer->accepts($exception)) {
             return new ExceptionApiProblem($exception);

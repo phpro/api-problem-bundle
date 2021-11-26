@@ -7,13 +7,14 @@ namespace Phpro\ApiProblemBundle\Transformer;
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\Http\ExceptionApiProblem;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class HttpExceptionTransformer implements ExceptionTransformerInterface
 {
     /**
      * @param HttpException $exception
      */
-    public function transform(\Throwable $exception): ApiProblemInterface
+    public function transform(Throwable $exception): ApiProblemInterface
     {
         return new ExceptionApiProblem(
             new HttpException(
@@ -26,7 +27,7 @@ class HttpExceptionTransformer implements ExceptionTransformerInterface
         );
     }
 
-    public function accepts(\Throwable $exception): bool
+    public function accepts(Throwable $exception): bool
     {
         return $exception instanceof HttpException;
     }

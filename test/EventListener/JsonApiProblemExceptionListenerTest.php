@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhproTest\ApiProblemBundle\EventListener;
 
+use Exception;
+use function json_encode;
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\DebuggableApiProblemInterface;
 use Phpro\ApiProblem\Http\HttpApiProblem;
@@ -17,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Throwable;
 
 /** @covers \Phpro\ApiProblemBundle\EventListener\JsonApiProblemExceptionListener */
 class JsonApiProblemExceptionListenerTest extends TestCase
@@ -34,7 +37,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
     private $event;
 
     /**
-     * @var \Throwable
+     * @var Throwable
      */
     private $exception;
 
@@ -47,7 +50,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
     {
         $this->request = $this->prophesize(Request::class);
         $httpKernel = $this->prophesize(HttpKernelInterface::class);
-        $this->exception = new \Exception('error');
+        $this->exception = new Exception('error');
         $this->event = new ExceptionEvent(
             $httpKernel->reveal(),
             $this->request->reveal(),
@@ -123,8 +126,8 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $apiProblem = $this->prophesize(ApiProblemInterface::class);
         $apiProblem->toArray()->willReturn([]);
 
-        $this->exceptionTransformer->accepts(Argument::type(\Exception::class))->willReturn(true);
-        $this->exceptionTransformer->transform(Argument::type(\Exception::class))->willReturn($apiProblem->reveal());
+        $this->exceptionTransformer->accepts(Argument::type(Exception::class))->willReturn(true);
+        $this->exceptionTransformer->transform(Argument::type(Exception::class))->willReturn($apiProblem->reveal());
 
         $listener->onKernelException($this->event);
         $this->assertApiProblemWithResponseBody(400, []);
@@ -140,8 +143,8 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $apiProblem = $this->prophesize(ApiProblemInterface::class);
         $apiProblem->toArray()->willReturn(['status' => 123]);
 
-        $this->exceptionTransformer->accepts(Argument::type(\Exception::class))->willReturn(true);
-        $this->exceptionTransformer->transform(Argument::type(\Exception::class))->willReturn($apiProblem->reveal());
+        $this->exceptionTransformer->accepts(Argument::type(Exception::class))->willReturn(true);
+        $this->exceptionTransformer->transform(Argument::type(Exception::class))->willReturn($apiProblem->reveal());
 
         $listener->onKernelException($this->event);
         $this->assertApiProblemWithResponseBody(123, ['status' => 123]);
@@ -174,7 +177,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertSame($expectedResponseCode, $response->getStatusCode());
         $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
         $this->assertJsonStringEqualsJsonString(
-            \json_encode($expectedData),
+            json_encode($expectedData),
             $this->event->getResponse()->getContent()
         );
     }

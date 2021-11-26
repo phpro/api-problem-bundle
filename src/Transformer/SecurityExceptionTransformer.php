@@ -9,10 +9,11 @@ use Phpro\ApiProblem\Http\ForbiddenProblem;
 use Phpro\ApiProblem\Http\UnauthorizedProblem;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\ExceptionInterface as SecurityException;
+use Throwable;
 
 class SecurityExceptionTransformer implements ExceptionTransformerInterface
 {
-    public function transform(\Throwable $exception): ApiProblemInterface
+    public function transform(Throwable $exception): ApiProblemInterface
     {
         if ($exception instanceof AuthenticationException) {
             return new UnauthorizedProblem($exception->getMessage());
@@ -21,7 +22,7 @@ class SecurityExceptionTransformer implements ExceptionTransformerInterface
         return new ForbiddenProblem($exception->getMessage());
     }
 
-    public function accepts(\Throwable $exception): bool
+    public function accepts(Throwable $exception): bool
     {
         return $exception instanceof SecurityException;
     }

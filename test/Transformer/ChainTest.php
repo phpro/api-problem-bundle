@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhproTest\ApiProblemBundle\Transformer;
 
+use Exception;
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\Http\ExceptionApiProblem;
 use Phpro\ApiProblemBundle\Transformer\Chain;
@@ -31,7 +32,7 @@ class ChainTest extends TestCase
     public function it_accepts_any_exception(): void
     {
         $transformer = new Chain([]);
-        $this->assertTrue($transformer->accepts(new \Exception()));
+        $this->assertTrue($transformer->accepts(new Exception()));
     }
 
     /** @test */
@@ -43,7 +44,7 @@ class ChainTest extends TestCase
             $this->mockTransformer(true, $apiProblem2 = $this->prophesize(ApiProblemInterface::class)->reveal()),
         ]);
 
-        $this->assertEquals($apiProblem1, $transformer->transform(new \Exception()));
+        $this->assertEquals($apiProblem1, $transformer->transform(new Exception()));
     }
 
     /** @test */
@@ -51,7 +52,7 @@ class ChainTest extends TestCase
     {
         $transformer = new Chain([$this->mockTransformer(false)]);
 
-        $this->assertInstanceOf(ExceptionApiProblem::class, $transformer->transform(new \Exception()));
+        $this->assertInstanceOf(ExceptionApiProblem::class, $transformer->transform(new Exception()));
     }
 
     private function mockTransformer(bool $accepts, ?ApiProblemInterface $apiProblem = null): ExceptionTransformerInterface

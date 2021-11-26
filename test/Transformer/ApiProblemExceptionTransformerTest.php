@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhproTest\ApiProblemBundle\Transformer;
 
+use Exception;
 use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\Exception\ApiProblemException;
 use Phpro\ApiProblemBundle\Transformer\ApiProblemExceptionTransformer;
@@ -43,7 +44,7 @@ class ApiProblemExceptionTransformerTest extends TestCase
         $transformer = new ApiProblemExceptionTransformer();
 
         $this->assertTrue($transformer->accepts(new ApiProblemException($this->apiProblem->reveal())));
-        $this->assertFalse($transformer->accepts(new \Exception()));
+        $this->assertFalse($transformer->accepts(new Exception()));
     }
 
     /** @test */

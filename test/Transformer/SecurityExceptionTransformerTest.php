@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhproTest\ApiProblemBundle\Transformer;
 
+use Exception;
 use Phpro\ApiProblem\Http\ForbiddenProblem;
 use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblem\Http\UnauthorizedProblem;
@@ -32,7 +33,7 @@ class SecurityExceptionTransformerTest extends TestCase
         $transformer = new SecurityExceptionTransformer();
 
         $this->assertTrue($transformer->accepts(new RuntimeException()));
-        $this->assertFalse($transformer->accepts(new \Exception()));
+        $this->assertFalse($transformer->accepts(new Exception()));
     }
 
     /** @test */

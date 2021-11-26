@@ -28,7 +28,7 @@ class ApiProblemHttpExceptionTest extends TestCase
     }
 
     /** @test */
-    public function it_is_accepted_by_the_ApiProblemExceptionTransformer(): void
+    public function it_is_accepted_by_the__api_problem_exception_transformer(): void
     {
         $transformer = new ApiProblemExceptionTransformer();
 
@@ -36,7 +36,7 @@ class ApiProblemHttpExceptionTest extends TestCase
     }
 
     /** @test */
-    public function it_is_an_instance_of_HttpException(): void
+    public function it_is_an_instance_of__http_exception(): void
     {
         $exception = new ApiProblemHttpException($this->apiProblem->reveal());
 

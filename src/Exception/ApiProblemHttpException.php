@@ -27,12 +27,12 @@ class ApiProblemHttpException extends HttpException
         return $this->apiProblem;
     }
 
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return parent::getStatusCode() > 0 ? parent::getStatusCode() : Response::HTTP_BAD_REQUEST;
     }
 
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return ['Content-Type' => 'application/problem+json'];
     }

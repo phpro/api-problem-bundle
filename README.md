@@ -34,16 +34,16 @@ return [
 
 ## How it works
 
-```
-Use Phpro\ApiProblem\Exception\ApiProblemException
+```php
+use Phpro\ApiProblem\Exception\ApiProblemException
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-SomeController {
-
+class SomeController
+{
     /**
      * @Route('/some-route', defaults={"_format" = "json"})
      */
-    someAction() {
+    public function someAction() {
         throw new ApiProblemException(
             new HttpApiProblem('400', 'It aint all bad ...')
         );

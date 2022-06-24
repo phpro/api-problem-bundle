@@ -34,7 +34,7 @@ return [
 ## How it works
 
 ```php
-use Phpro\ApiProblem\Exception\ApiProblemException
+use Phpro\ApiProblem\Exception\ApiProblemException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class SomeController

@@ -1,4 +1,3 @@
-[![Travis](https://img.shields.io/travis/phpro/api-problem-bundle/master.svg)](http://travis-ci.org/phpro/api-problem-bundle)
 [![Installs](https://img.shields.io/packagist/dt/phpro/api-problem-bundle.svg)](https://packagist.org/packages/phpro/api-problem-bundle/stats)
 [![Packagist](https://img.shields.io/packagist/v/phpro/api-problem-bundle.svg)](https://packagist.org/packages/phpro/api-problem-bundle)
 

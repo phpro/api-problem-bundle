@@ -199,7 +199,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         ];
     }
 
-    private function buildEvent(Request $request, Exception $exception = null): ExceptionEvent
+    private function buildEvent(Request $request, ?Exception $exception = null): ExceptionEvent
     {
         $exception ??= new Exception('error');
 
@@ -208,7 +208,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         return new ExceptionEvent(
             $httpKernel->reveal(),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
     }

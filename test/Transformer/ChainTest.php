@@ -55,7 +55,7 @@ class ChainTest extends TestCase
         $this->assertInstanceOf(ExceptionApiProblem::class, $transformer->transform(new Exception()));
     }
 
-    private function mockTransformer(bool $accepts, ApiProblemInterface $apiProblem = null): ExceptionTransformerInterface
+    private function mockTransformer(bool $accepts, ?ApiProblemInterface $apiProblem = null): ExceptionTransformerInterface
     {
         /** @var ExceptionTransformerInterface|ObjectProphecy $transformer */
         $transformer = $this->prophesize(ExceptionTransformerInterface::class);

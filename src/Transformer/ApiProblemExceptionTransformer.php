@@ -9,6 +9,9 @@ use Phpro\ApiProblem\Exception\ApiProblemException;
 use Phpro\ApiProblemBundle\Exception\ApiProblemHttpException;
 use Throwable;
 
+/**
+ * @template-implements ExceptionTransformerInterface<ApiProblemException|ApiProblemHttpException>
+ */
 class ApiProblemExceptionTransformer implements ExceptionTransformerInterface
 {
     /**

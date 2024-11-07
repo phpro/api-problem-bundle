@@ -9,6 +9,9 @@ use Phpro\ApiProblem\Http\ExceptionApiProblem;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
+/**
+ * @template-implements ExceptionTransformerInterface<HttpException>
+ */
 class HttpExceptionTransformer implements ExceptionTransformerInterface
 {
     /**

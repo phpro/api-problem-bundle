@@ -8,6 +8,9 @@ use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\Http\ExceptionApiProblem;
 use Throwable;
 
+/**
+ * @template-implements ExceptionTransformerInterface<Throwable>
+ */
 class Chain implements ExceptionTransformerInterface
 {
     /**

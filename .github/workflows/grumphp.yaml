@@ -20,6 +20,11 @@ jobs:
                   php-version: ${{ matrix.php-versions }}
                   tools: 'composer:v2'
                   extensions: pcov, mbstring, posix
+            - name: Set env vars for latest PHP version
+              if: matrix.php-versions == '8.4'
+              run: |
+                export COMPOSER_IGNORE_PLATFORM_REQ=php+
+                export BOX_REQUIREMENT_CHECKER=0
             - name: Check Versions
               run: |
                   php -v

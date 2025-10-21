@@ -10,24 +10,24 @@ use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblem\Http\UnauthorizedProblem;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use Phpro\ApiProblemBundle\Transformer\SecurityExceptionTransformer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\RuntimeException;
 
-/**
- * @covers \Phpro\ApiProblemBundle\Transformer\SecurityExceptionTransformer
- */
+#[CoversClass(SecurityExceptionTransformer::class)]
 class SecurityExceptionTransformerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_is_an_exception_transformer(): void
     {
         $transformer = new SecurityExceptionTransformer();
         $this->assertInstanceOf(ExceptionTransformerInterface::class, $transformer);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_api_problem_exceptions(): void
     {
         $transformer = new SecurityExceptionTransformer();
@@ -36,7 +36,7 @@ class SecurityExceptionTransformerTest extends TestCase
         $this->assertFalse($transformer->accepts(new Exception()));
     }
 
-    /** @test */
+    #[Test]
     public function it_transforms_authentication_exception_to_api_problem(): void
     {
         $transformer = new SecurityExceptionTransformer();
@@ -52,7 +52,7 @@ class SecurityExceptionTransformerTest extends TestCase
         ], $apiProblem->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_transforms_other_security_exceptions_to_api_problem(): void
     {
         $transformer = new SecurityExceptionTransformer();

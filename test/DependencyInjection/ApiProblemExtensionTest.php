@@ -8,11 +8,11 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Phpro\ApiProblemBundle\DependencyInjection\ApiProblemExtension;
 use Phpro\ApiProblemBundle\EventListener\JsonApiProblemExceptionListener;
 use Phpro\ApiProblemBundle\Transformer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 
-/**
- * @covers \Phpro\ApiProblemBundle\DependencyInjection\ApiProblemExtension
- */
+#[CoversClass(ApiProblemExtension::class)]
 class ApiProblemExtensionTest extends AbstractExtensionTestCase
 {
     private const TRANSFORMER_TAG = 'phpro.api_problem.exception_transformer';
@@ -22,7 +22,7 @@ class ApiProblemExtensionTest extends AbstractExtensionTestCase
         return [new ApiProblemExtension()];
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_json_exception_listener(): void
     {
         $this->load([]);
@@ -52,7 +52,7 @@ class ApiProblemExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_contains_exception_transformers(): void
     {
         $this->load([]);

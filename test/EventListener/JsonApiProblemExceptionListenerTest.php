@@ -13,6 +13,8 @@ use Phpro\ApiProblem\DebuggableApiProblemInterface;
 use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblemBundle\EventListener\JsonApiProblemExceptionListener;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -22,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-/** @covers \Phpro\ApiProblemBundle\EventListener\JsonApiProblemExceptionListener */
+#[CoversClass(JsonApiProblemExceptionListener::class)]
 class JsonApiProblemExceptionListenerTest extends TestCase
 {
     use ProphecyTrait;
@@ -38,7 +40,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->exceptionTransformer->accepts(Argument::any())->willReturn(false);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_nothing_on_non_json_requests(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
@@ -53,7 +55,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertNull($event->getResponse());
     }
 
-    /** @test */
+    #[Test]
     public function it_runs_on_json_route_formats(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
@@ -69,7 +71,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertApiProblemWithResponseBody($event, 500, $this->parseDataForException($exception));
     }
 
-    /** @test */
+    #[Test]
     public function it_runs_on_json_content_types(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
@@ -84,7 +86,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertApiProblemWithResponseBody($event, 500, $this->parseDataForException($exception));
     }
 
-    /** @test */
+    #[Test]
     public function it_runs_on_json_accept_header(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
@@ -99,7 +101,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertApiProblemWithResponseBody($event, 500, $this->parseDataForException($exception));
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_an_api_problem_response(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
@@ -114,7 +116,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertApiProblemWithResponseBody($event, 500, $this->parseDataForException($exception));
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_an_exception_transformer(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
@@ -134,7 +136,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertApiProblemWithResponseBody($event, 400, []);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_status_code_from_the_api_problem(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), false);
@@ -154,7 +156,7 @@ class JsonApiProblemExceptionListenerTest extends TestCase
         $this->assertApiProblemWithResponseBody($event, 123, ['status' => 123]);
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_a_debuggable_api_problem_response(): void
     {
         $listener = new JsonApiProblemExceptionListener($this->exceptionTransformer->reveal(), true);

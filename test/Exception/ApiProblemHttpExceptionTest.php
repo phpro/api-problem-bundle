@@ -7,6 +7,7 @@ namespace PhproTest\ApiProblemBundle\Exception;
 use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblemBundle\Exception\ApiProblemHttpException;
 use Phpro\ApiProblemBundle\Transformer\ApiProblemExceptionTransformer;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -27,7 +28,7 @@ class ApiProblemHttpExceptionTest extends TestCase
         $this->apiProblem->toArray()->willReturn([]);
     }
 
-    /** @test */
+    #[Test]
     public function it_is_accepted_by_the__api_problem_exception_transformer(): void
     {
         $transformer = new ApiProblemExceptionTransformer();
@@ -35,7 +36,7 @@ class ApiProblemHttpExceptionTest extends TestCase
         $this->assertTrue($transformer->accepts(new ApiProblemHttpException($this->apiProblem->reveal())));
     }
 
-    /** @test */
+    #[Test]
     public function it_is_an_instance_of__http_exception(): void
     {
         $exception = new ApiProblemHttpException($this->apiProblem->reveal());
@@ -43,7 +44,7 @@ class ApiProblemHttpExceptionTest extends TestCase
         $this->assertInstanceOf(HttpException::class, $exception);
     }
 
-    /** @test */
+    #[Test]
     public function it_contains_an_api_problem(): void
     {
         $apiProblem = $this->apiProblem->reveal();
@@ -52,7 +53,7 @@ class ApiProblemHttpExceptionTest extends TestCase
         $this->assertEquals($apiProblem, $exception->getApiProblem());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_correct_http_headers(): void
     {
         $exception = new ApiProblemHttpException($this->apiProblem->reveal());
@@ -60,7 +61,7 @@ class ApiProblemHttpExceptionTest extends TestCase
         $this->assertEquals(['Content-Type' => 'application/problem+json'], $exception->getHeaders());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_correct_default_http_statuscode(): void
     {
         $exception = new ApiProblemHttpException($this->apiProblem->reveal());
@@ -68,7 +69,7 @@ class ApiProblemHttpExceptionTest extends TestCase
         $this->assertEquals(400, $exception->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_correct_specified_http_statuscode(): void
     {
         $this->apiProblem->toArray()->willReturn(['status' => 401]);

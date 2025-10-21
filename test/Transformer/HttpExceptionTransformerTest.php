@@ -9,22 +9,22 @@ use Phpro\ApiProblem\Http\ExceptionApiProblem;
 use Phpro\ApiProblem\Http\HttpApiProblem;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
 use Phpro\ApiProblemBundle\Transformer\HttpExceptionTransformer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-/**
- * @covers \Phpro\ApiProblemBundle\Transformer\HttpExceptionTransformer
- */
+#[CoversClass(HttpExceptionTransformer::class)]
 class HttpExceptionTransformerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_is_an_exception_transformer(): void
     {
         $transformer = new HttpExceptionTransformer();
         $this->assertInstanceOf(ExceptionTransformerInterface::class, $transformer);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_api_problem_exceptions(): void
     {
         $transformer = new HttpExceptionTransformer();
@@ -33,7 +33,7 @@ class HttpExceptionTransformerTest extends TestCase
         $this->assertFalse($transformer->accepts(new Exception()));
     }
 
-    /** @test */
+    #[Test]
     public function it_transforms_exception_to_api_problem(): void
     {
         $transformer = new HttpExceptionTransformer();

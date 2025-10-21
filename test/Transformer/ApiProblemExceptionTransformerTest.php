@@ -9,13 +9,13 @@ use Phpro\ApiProblem\ApiProblemInterface;
 use Phpro\ApiProblem\Exception\ApiProblemException;
 use Phpro\ApiProblemBundle\Transformer\ApiProblemExceptionTransformer;
 use Phpro\ApiProblemBundle\Transformer\ExceptionTransformerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @covers \Phpro\ApiProblemBundle\Transformer\ApiProblemExceptionTransformer
- */
+#[CoversClass(ApiProblemExceptionTransformer::class)]
 class ApiProblemExceptionTransformerTest extends TestCase
 {
     use ProphecyTrait;
@@ -31,14 +31,14 @@ class ApiProblemExceptionTransformerTest extends TestCase
         $this->apiProblem->toArray()->willReturn([]);
     }
 
-    /** @test */
+    #[Test]
     public function it_is_an_exception_transformer(): void
     {
         $transformer = new ApiProblemExceptionTransformer();
         $this->assertInstanceOf(ExceptionTransformerInterface::class, $transformer);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_api_problem_exceptions(): void
     {
         $transformer = new ApiProblemExceptionTransformer();
@@ -47,7 +47,7 @@ class ApiProblemExceptionTransformerTest extends TestCase
         $this->assertFalse($transformer->accepts(new Exception()));
     }
 
-    /** @test */
+    #[Test]
     public function it_transforms_exception_to_api_problem(): void
     {
         $transformer = new ApiProblemExceptionTransformer();

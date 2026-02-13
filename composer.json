@@ -12,9 +12,9 @@
     "require": {
         "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
         "phpro/api-problem": "^1.0",
-        "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0",
-        "symfony/event-dispatcher": "^5.4 || ^6.0 || ^7.0",
-        "symfony/http-kernel": "^6.4 || ^7.0"
+        "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
+        "symfony/event-dispatcher": "^6.4 || ^7.4 || ^8.0",
+        "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0"
     },
     "require-dev": {
         "matthiasnoback/symfony-dependency-injection-test": "^4.3",
@@ -23,7 +23,7 @@
         "phpspec/prophecy": "^1.17",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^12.4",
-        "symfony/security-core": "^5.4 || ^6.0 || ^7.0"
+        "symfony/security-core": "^6.4 || ^7.4 || ^8.0"
     },
     "config": {
         "sort-packages": true,

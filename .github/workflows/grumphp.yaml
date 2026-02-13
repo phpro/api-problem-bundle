@@ -46,3 +46,4 @@ jobs:
               continue-on-error: ${{ matrix.php-versions == '8.5' }}
               env:
                 PHP_CS_FIXER_IGNORE_ENV: 1
+                BOX_REQUIREMENT_CHECKER: 0

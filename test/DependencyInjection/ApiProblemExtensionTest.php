@@ -11,6 +11,7 @@ use Phpro\ApiProblemBundle\Transformer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use Symfony\Component\DependencyInjection\Reference;
 
 #[CoversClass(ApiProblemExtension::class)]
 class ApiProblemExtensionTest extends AbstractExtensionTestCase
@@ -34,7 +35,7 @@ class ApiProblemExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             JsonApiProblemExceptionListener::class,
             '$exceptionTransformer',
-            Transformer\Chain::class
+            new Reference(Transformer\Chain::class),
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             JsonApiProblemExceptionListener::class,
